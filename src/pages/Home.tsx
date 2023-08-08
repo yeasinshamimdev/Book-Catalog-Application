@@ -1,7 +1,15 @@
+import { useEffect, useState } from "react";
 import headerImage from "../assets/header-image.png";
 import ProductCard from "../components/ProductCard";
+import { IBooks } from "../interface/IBooks";
 
 export default function Home() {
+  const [books, setBooks] = useState([]);
+  useEffect(() => {
+    fetch("https://book-catalog-backend-l8vj.onrender.com/api/v1/book")
+      .then((res) => res.json())
+      .then((data) => setBooks(data.data));
+  }, []);
   return (
     <>
       <div className="2xl:px-24 lg:px-12 pt-24 bg-green-100">
@@ -24,7 +32,11 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <ProductCard />
+      <div className="flex flex-wrap my-8 gap-4">
+        {books.map((book: IBooks) => (
+          <ProductCard key={book._id} book={book} />
+        ))}
+      </div>
     </>
   );
 }
