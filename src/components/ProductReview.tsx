@@ -11,12 +11,10 @@ export default function ProductReview({ id }: any) {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const optionValue = {
-      id: id,
-      data: { comment: inputValue },
-    };
+
     setInputValue("");
   };
+  console.log(id);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
