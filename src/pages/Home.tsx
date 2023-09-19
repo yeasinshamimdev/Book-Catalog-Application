@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
 import headerImage from "../assets/header-image.png";
+import Loader from "../components/Loader";
 import ProductCard from "../components/ProductCard";
 import { IBooks } from "../interface/IBooks";
+import { useGetBooksQuery } from "../redux/api/apiSlice";
 
 export default function Home() {
-  const [books, setBooks] = useState([]);
-  useEffect(() => {
-    fetch("https://book-catalog-backend-l8vj.onrender.com/api/v1/book")
-      .then((res) => res.json())
-      .then((data) => setBooks(data.data));
-  }, []);
+  const { data: books, isLoading } = useGetBooksQuery({
+    refetchOnMountOrArgChange: true,
+  });
+  const loaderMap = [1, 2, 3, 4];
+
   return (
     <>
       <div className="2xl:px-24 lg:px-12 pt-24 bg-green-100">
@@ -33,7 +33,13 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-wrap my-8 gap-4">
-        {books.map((book: IBooks) => (
+        {isLoading &&
+          loaderMap.map(() => (
+            <div className="flex gap-8">
+              <Loader />
+            </div>
+          ))}
+        {books?.data?.map((book: IBooks) => (
           <ProductCard key={book._id} book={book} />
         ))}
       </div>

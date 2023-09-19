@@ -1,9 +1,14 @@
 "use client";
 
 import * as React from "react";
+import {
+  useSignInWithEmailAndPassword,
+  useSignInWithGoogle,
+} from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../lib/firebase";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -22,9 +27,20 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
+  const navigate = useNavigate();
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+  const [signInWithGoogle, googleUser, googleLoading, googleError] =
+    useSignInWithGoogle(auth);
+
   const onSubmit = (data: LoginFormInputs) => {
+    signInWithEmailAndPassword(data.email, data.password);
     console.log(data);
   };
+
+  if (user || googleUser) {
+    navigate("/");
+  }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -67,9 +83,17 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
                 {errors.password.message}
               </p>
             )}
+            {(error || googleError) && (
+              <div>
+                <p className="text-sm mt-1 text-red-900">
+                  {error?.message}
+                  {googleError?.message}
+                </p>
+              </div>
+            )}
           </div>
           <Button className="mt-4 bg-sky-600 hover:bg-green-700">
-            Create Account
+            {loading || googleLoading ? <p>Loading...</p> : <p> Login</p>}
           </Button>
         </div>
       </form>
@@ -93,6 +117,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
       <Button
         type="button"
         className="flex items-center justify-center gap-1 bg-blue-600 hover:bg-blue-500"
+        onClick={() => signInWithGoogle()}
       >
         <FcGoogle size={20} />
         <p>Google</p>

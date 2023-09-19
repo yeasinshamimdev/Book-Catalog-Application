@@ -1,5 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
+import AddNew from "../pages/AddNew";
+import AllBooks from "../pages/AllBooks";
+import BookDetails from "../pages/BookDetails";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
@@ -13,6 +16,18 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "/all-books",
+        element: <AllBooks />,
+      },
+      {
+        path: "/all-books/:id",
+        element: <BookDetails />,
+      },
+      {
+        path: "/add-new",
+        element: <AddNew />,
       },
     ],
   },

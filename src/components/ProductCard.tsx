@@ -16,7 +16,7 @@ export default function ProductCard({ book }: { book: IBooks }) {
   return (
     <div className="2xl:px-12 lg:px-8 mb-8">
       <div className="rounded-2xl h-[520px] w-[250px] flex flex-col items-start justify-between p-5 overflow-hidden shadow-md border border-gray-100 hover:shadow-2xl hover:scale-[102%] transition-all gap-2">
-        <Link to={`/product-details/${book._id}`} className="w-full">
+        <Link to={`/all-books/${book._id}`} className="w-full">
           <img src={Book1} alt="product" />
           <h1 className="text-xl font-semibold mt-4">{book?.title}</h1>
         </Link>
